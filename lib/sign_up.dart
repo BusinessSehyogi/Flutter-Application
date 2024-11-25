@@ -1,3 +1,4 @@
+import 'package:business_sehyogi/login.dart';
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatefulWidget {
@@ -116,7 +117,7 @@ class _SignupPageState extends State<SignupPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "OK",
+                        "Sign up",
                         style: TextStyle(color: Colors.blue),
                       ),
                       Icon(
@@ -134,17 +135,24 @@ class _SignupPageState extends State<SignupPage> {
                 children: [
                   const Text(
                     "Have we met before? ",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, fontSize: 15),
                   ),
                   GestureDetector(
                     onTap: () {
-                      // Handle sign in navigation
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginPage(),
+                        ),
+                      );
                     },
                     child: const Text(
                       "Sign in",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
+                        fontSize: 15
                       ),
                     ),
                   ),

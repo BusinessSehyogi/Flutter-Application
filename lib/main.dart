@@ -1,11 +1,5 @@
-import 'dart:convert';
-
 import 'package:business_sehyogi/login.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-
-import 'ipAddress.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,42 +12,45 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Flutter Demo',
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: SplashScreen(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.title});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
-  final String title;
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _navigateToHome();
+  }
+
+  Future<void> _navigateToHome() async {
+    await Future.delayed(const Duration(seconds: 7));
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    fetchData();
-    return const LoginPage();
-  }
-}
-
-void fetchData() async {
-  var url = "http://$IP/getUsers";
-  try {
-    final response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      // Parse the JSON data
-      final List<dynamic> users = jsonDecode(response.body);
-      if (kDebugMode) {
-        print(users[0]);
-      }
-    } else {
-      if (kDebugMode) {
-        print('Failed to load users: ${response.statusCode}');
-      }
-    }
-  } catch (e) {
-    if (kDebugMode) {
-      print('Error: $e');
-    }
+    return Scaffold(
+      backgroundColor: const Color(0xff2a446b),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset("assets/GIF/logo-gif.gif"),
+          ],
+        ),
+      ),
+    );
   }
 }
