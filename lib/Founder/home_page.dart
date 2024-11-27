@@ -31,9 +31,7 @@ class _FounderHomePageState extends State<FounderHomePage> {
 
   Future<void> getUserKey() async {
     userKey = (await getKey())!;
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   // Method to handle likes
@@ -107,7 +105,8 @@ class _FounderHomePageState extends State<FounderHomePage> {
                               var userImagePath = post["user"]['photo'] == null
                                   ? 'https://firebasestorage.googleapis.com/v0/b/arogyasair-157e8.appspot.com/o/UserImage%2FDefaultProfileImage.png?alt=media'
                                   : "https://firebasestorage.googleapis.com/v0/b/business-sehyogi.appspot.com/o/$userImageName?alt=media";
-
+                              var comments = 0;
+                              if (post['noOfComments'] != null) {}
                               return Card(
                                 color: Colors.white,
                                 margin: const EdgeInsets.all(10.0),
@@ -180,6 +179,37 @@ class _FounderHomePageState extends State<FounderHomePage> {
                                               ),
                                               Text(
                                                   '${post['noOfComments']} comments'),
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.02,
+                                              ),
+                                              if(post["images"] == null)
+                                                ElevatedButton(
+                                                  onPressed: () async {
+                                                    var dateUrl = "http://$IP/getCurrentDateTime";
+                                                    final dateResponse = await http.get(Uri.parse(dateUrl));
+                                                    var date = dateResponse.body;
+                                                    var paymentURL = "http://$IP/addPayment";
+                                                    final response = await http.post(
+                                                      Uri.parse(paymentURL),
+                                                      headers: {
+                                                        "Content-Type": "application/json",
+                                                      },
+                                                      body: jsonEncode({
+                                                        "amount": "150.50",
+                                                        "paymentDateTime": date.toString(),
+                                                        "transactionId": "txn_1234567890",
+                                                        "users": userKey.toString(),
+                                                        "posts": post["postId"].toString()
+                                                      }),
+                                                    );
+                                                    setState(() {
+
+                                                    });
+                                                  },
+                                                  child: const Text("Pay"))
                                             ],
                                           ),
                                         ],
@@ -206,18 +236,20 @@ class _FounderHomePageState extends State<FounderHomePage> {
   }
 
   Future<void> _fetchHomePagePosts() async {
-    var homePagePostsURL = "http://$IP/getPostForHomePage/$userKey?page=$page&size=15";
+    var homePagePostsURL =
+        "http://$IP/getPostForHomePage/$userKey?page=$page&size=15";
     try {
       final response = await http.get(Uri.parse(homePagePostsURL));
       List<dynamic> responseData = jsonDecode(response.body);
 
       // Create a Map using integer keys (starting from the next available key)
       Map<int, dynamic> newPosts = {
-        for (int i = 0; i < responseData.length; i++) homePagePost.length + i: responseData[i]
+        for (int i = 0; i < responseData.length; i++)
+          homePagePost.length + i: responseData[i]
       };
 
       // Append new posts to the existing homePagePost map
-        homePagePost.addAll(newPosts); // This merges newPosts into homePagePost
+      homePagePost.addAll(newPosts); // This merges newPosts into homePagePost
       // setState(() {
       // });
     } catch (e) {
@@ -227,11 +259,9 @@ class _FounderHomePageState extends State<FounderHomePage> {
     }
   }
 
-
-
   void loadMoreData() {
     if (scrollController.position.pixels ==
-        scrollController.position.maxScrollExtent &&
+            scrollController.position.maxScrollExtent &&
         homePagePost.length < totProud) {
       setState(() {
         page++;

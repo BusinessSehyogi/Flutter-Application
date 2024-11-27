@@ -59,33 +59,36 @@ class _SplashScreenState extends State<SplashScreen> {
     containsKey = prefs.containsKey(key);
     containsKey1 = prefs.containsKey(key1);
 
-    if (containsKey) {
-      keyToCheck = (await getData("Email"))!;
+    try {
+      if (containsKey) {
+        keyToCheck = (await getData("Email"))!;
 
-      var url = "http://$IP/getUser/$keyToCheck";
+        var url = "http://$IP/getUser/$keyToCheck";
+        final response = await http.get(Uri.parse(url));
+        if (response.statusCode == 200) {
+          var responseData = jsonDecode(response.body);
 
-      final response = await http.get(Uri.parse(url));
-      if(response.statusCode == 200){
-        var responseData = jsonDecode(response.body);
-
-        if (responseData["visible"]) {
-          if (responseData["category"] == "Founder") {
-            page = const FounderBottomNavigationBar();
+          if (responseData["visible"]) {
+            if (responseData["category"] == "Founder") {
+              page = const FounderBottomNavigationBar();
+            } else {
+              page = const InvestorHomePage();
+            }
           } else {
-            page = const InvestorHomePage();
+            prefs.remove("key");
+            prefs.remove("Category");
           }
         } else {
           prefs.remove("key");
           prefs.remove("Category");
+          page = const LoginPage();
         }
+        return;
       } else {
-        prefs.remove("key");
-        prefs.remove("Category");
         page = const LoginPage();
       }
-      return;
-    } else {
-      page = const LoginPage();
+    }catch (e){
+      print(e);
     }
   }
 
