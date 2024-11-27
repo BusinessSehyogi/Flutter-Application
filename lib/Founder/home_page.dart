@@ -1,5 +1,8 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:convert';
 
+import 'package:business_sehyogi/Founder/user_profile_info.dart';
 import 'package:business_sehyogi/SharePreferences/saveSharePreferences.dart';
 import 'package:business_sehyogi/ipAddress.dart';
 import 'package:flutter/foundation.dart';
@@ -55,7 +58,7 @@ class _FounderHomePageState extends State<FounderHomePage> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return SizedBox(
-          height: MediaQuery.of(context).size.height * 1,
+          height: MediaQuery.of(context).size.height * 1.5,
           width: MediaQuery.of(context).size.width * 1,
           child: Scaffold(
             appBar: AppBar(
@@ -106,7 +109,9 @@ class _FounderHomePageState extends State<FounderHomePage> {
                                   ? 'https://firebasestorage.googleapis.com/v0/b/arogyasair-157e8.appspot.com/o/UserImage%2FDefaultProfileImage.png?alt=media'
                                   : "https://firebasestorage.googleapis.com/v0/b/business-sehyogi.appspot.com/o/$userImageName?alt=media";
                               var comments = 0;
-                              if (post['noOfComments'] != null) {}
+                              if (post['noOfComments'] != null) {
+                                comments = post['noOfComments'];
+                              }
                               return Card(
                                 color: Colors.white,
                                 margin: const EdgeInsets.all(10.0),
@@ -135,12 +140,25 @@ class _FounderHomePageState extends State<FounderHomePage> {
                                             ),
                                           ),
                                           const SizedBox(width: 10),
-                                          Text(
-                                            "${post["user"]['firstName']} ${post["user"]['lastName']}",
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16),
-                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      FounderGetUserInfo(
+                                                          post["user"]
+                                                              ["email"]),
+                                                ),
+                                              );
+                                            },
+                                            child: Text(
+                                              "${post["user"]['firstName']} ${post["user"]['lastName']}",
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16),
+                                            ),
+                                          )
                                         ],
                                       ),
                                       const SizedBox(height: 10),
@@ -178,38 +196,49 @@ class _FounderHomePageState extends State<FounderHomePage> {
                                                     _addComment(index),
                                               ),
                                               Text(
-                                                  '${post['noOfComments']} comments'),
+                                                  '$comments comments'),
                                               SizedBox(
                                                 width: MediaQuery.of(context)
                                                         .size
                                                         .width *
                                                     0.02,
                                               ),
-                                              if(post["images"] == null)
+                                              if (post["images"] == null)
                                                 ElevatedButton(
-                                                  onPressed: () async {
-                                                    var dateUrl = "http://$IP/getCurrentDateTime";
-                                                    final dateResponse = await http.get(Uri.parse(dateUrl));
-                                                    var date = dateResponse.body;
-                                                    var paymentURL = "http://$IP/addPayment";
-                                                    final response = await http.post(
-                                                      Uri.parse(paymentURL),
-                                                      headers: {
-                                                        "Content-Type": "application/json",
-                                                      },
-                                                      body: jsonEncode({
-                                                        "amount": "150.50",
-                                                        "paymentDateTime": date.toString(),
-                                                        "transactionId": "txn_1234567890",
-                                                        "users": userKey.toString(),
-                                                        "posts": post["postId"].toString()
-                                                      }),
-                                                    );
-                                                    setState(() {
-
-                                                    });
-                                                  },
-                                                  child: const Text("Pay"))
+                                                    onPressed: () async {
+                                                      var dateUrl =
+                                                          "http://$IP/getCurrentDateTime";
+                                                      final dateResponse =
+                                                          await http.get(
+                                                              Uri.parse(
+                                                                  dateUrl));
+                                                      var date =
+                                                          dateResponse.body;
+                                                      var paymentURL =
+                                                          "http://$IP/addPayment";
+                                                      final response =
+                                                          await http.post(
+                                                        Uri.parse(paymentURL),
+                                                        headers: {
+                                                          "Content-Type":
+                                                              "application/json",
+                                                        },
+                                                        body: jsonEncode({
+                                                          "amount": "150.50",
+                                                          "paymentDateTime":
+                                                              date.toString(),
+                                                          "transactionId":
+                                                              "txn_1234567890",
+                                                          "users": userKey
+                                                              .toString(),
+                                                          "posts":
+                                                              post["postId"]
+                                                                  .toString()
+                                                        }),
+                                                      );
+                                                      setState(() {});
+                                                    },
+                                                    child: const Text("Pay"))
                                             ],
                                           ),
                                         ],

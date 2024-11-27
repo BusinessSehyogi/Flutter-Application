@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:business_sehyogi/Common/sign_up.dart';
@@ -315,7 +317,7 @@ class _LoginPageState extends State<LoginPage> {
                   actions: [
                     GestureDetector(
                       onTap: () {
-                        print("object");
+                        Navigator.pop(context);
                       },
                       child: const Text("Ok"),
                     )

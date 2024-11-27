@@ -1,29 +1,29 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'dart:convert';
 
-import 'package:business_sehyogi/Founder/edit_profile_page.dart';
-import 'package:business_sehyogi/Founder/settings_page.dart';
-import 'package:business_sehyogi/SharePreferences/saveSharePreferences.dart';
 import 'package:business_sehyogi/ipAddress.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class FounderProfilePage extends StatefulWidget {
-  const FounderProfilePage({super.key});
+class FounderGetUserInfo extends StatefulWidget {
+  final String email;
+
+  const FounderGetUserInfo(this.email, {super.key});
 
   @override
-  State<FounderProfilePage> createState() => _FounderProfilePageState();
+  State<FounderGetUserInfo> createState() => _FounderGetUserInfoState();
 }
 
-class _FounderProfilePageState extends State<FounderProfilePage> {
+class _FounderGetUserInfoState extends State<FounderGetUserInfo> {
+
   var responseData;
   var responsePostData;
   late Future<void> getUsersData;
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     getUserDetails();
   }
@@ -36,7 +36,7 @@ class _FounderProfilePageState extends State<FounderProfilePage> {
   }
 
   Future<void> getUserDetails() async {
-    var userEmail = await getData("Email");
+    var userEmail = widget.email;
     var userURL = "http://$IP/getUser/$userEmail";
     var response = await http.get(Uri.parse(userURL));
     responseData = jsonDecode(response.body);
@@ -51,6 +51,12 @@ class _FounderProfilePageState extends State<FounderProfilePage> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF3A4183),
         automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
         title: FutureBuilder<void>(
           future: getUsersData, // Use the future initialized in initState
           builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
@@ -74,19 +80,6 @@ class _FounderProfilePageState extends State<FounderProfilePage> {
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const FounderSettingsPage(),
-                ),
-              );
-            },
-          ),
-        ],
       ),
       body: FutureBuilder<void>(
         future: getUsersData, // Use the future initialized in initState
@@ -107,6 +100,7 @@ class _FounderProfilePageState extends State<FounderProfilePage> {
               }
               return Column(
                 children: [
+                  // first half
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 1,
                     height: MediaQuery.of(context).size.height * 0.405,
@@ -120,7 +114,6 @@ class _FounderProfilePageState extends State<FounderProfilePage> {
                           borderRadius: BorderRadius.circular(100),
                           child: Image.network(
                             imagePath,
-                            height: MediaQuery.of(context).size.height * 0.17,
                             fit: BoxFit.cover,
                             alignment: Alignment.center,
                           ),
@@ -149,10 +142,12 @@ class _FounderProfilePageState extends State<FounderProfilePage> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(10),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        responseData["noOfIdeas"].toString(),
+                                        responseData["noOfIdeas"]
+                                            .toString(),
                                       ),
                                       const Text("Ideas"),
                                     ],
@@ -167,7 +162,8 @@ class _FounderProfilePageState extends State<FounderProfilePage> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(10),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.center,
                                     children: [
                                       Text(
                                         responseData["noOfConnections"]
@@ -205,39 +201,66 @@ class _FounderProfilePageState extends State<FounderProfilePage> {
                                     padding:
                                         const EdgeInsets.all(10), // Padding
                                   ),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              FounderEditProfilePage(responseData["email"]),
-                                        ),
-                                      );
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Icon(
-                                          Icons.edit,
-                                          color: Colors.black,
-                                        ),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.03,
-                                        ),
-                                        const Text(
-                                          "Edit Profile",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        )
-                                      ],
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.call,
+                                        color: Colors.black,
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.03,
+                                      ),
+                                      const Text(
+                                        "Contact",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.09,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.06,
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                child: TextButton(
+                                  onPressed: () {},
+                                  style: TextButton.styleFrom(
+                                    backgroundColor:
+                                        Colors.grey.withOpacity(0.5),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
                                     ),
+                                    padding: const EdgeInsets.all(10),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.add,
+                                        color: Colors.black,
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.03,
+                                      ),
+                                      const Text(
+                                        "Connect",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ],
                                   ),
                                 ),
                               ),
@@ -247,10 +270,10 @@ class _FounderProfilePageState extends State<FounderProfilePage> {
                       ],
                     ),
                   ),
-                  // second half part
+                  // second half
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 1,
-                    height: MediaQuery.of(context).size.height * 0.4077,
+                    height: MediaQuery.of(context).size.height * 0.409,
                     child: Container(
                       color: Colors.transparent,
                       child: ListView.builder(
