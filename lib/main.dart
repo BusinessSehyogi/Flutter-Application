@@ -1,5 +1,13 @@
-import 'package:business_sehyogi/login.dart';
+import 'dart:convert';
+
+import 'package:business_sehyogi/Common/login.dart';
+import 'package:business_sehyogi/Founder/bottom_navigation_bar.dart';
+import 'package:business_sehyogi/Investor/home_page.dart';
+import 'package:business_sehyogi/SharePreferences/saveSharePreferences.dart';
+import 'package:business_sehyogi/ipAddress.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,6 +33,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  String data = "";
+  final key = 'Email';
+  final key1 = 'Category';
+  late bool containsKey;
+  late bool containsKey1;
+  late String keyToCheck;
+  var page;
+
   @override
   void initState() {
     super.initState();
@@ -33,10 +49,44 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _navigateToHome() async {
     await Future.delayed(const Duration(seconds: 7));
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginPage()),
-    );
+    await _checkIfLoggedIn();
+    Navigator.pop(context);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+  }
+
+  Future<void> _checkIfLoggedIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    containsKey = prefs.containsKey(key);
+    containsKey1 = prefs.containsKey(key1);
+
+    if (containsKey) {
+      keyToCheck = (await getData("Email"))!;
+
+      var url = "http://$IP/getUser/$keyToCheck";
+
+      final response = await http.get(Uri.parse(url));
+      if(response.statusCode == 200){
+        var responseData = jsonDecode(response.body);
+
+        if (responseData["visible"]) {
+          if (responseData["category"] == "Founder") {
+            page = const FounderBottomNavigationBar();
+          } else {
+            page = const InvestorHomePage();
+          }
+        } else {
+          prefs.remove("key");
+          prefs.remove("Category");
+        }
+      } else {
+        prefs.remove("key");
+        prefs.remove("Category");
+        page = const LoginPage();
+      }
+      return;
+    } else {
+      page = const LoginPage();
+    }
   }
 
   @override
