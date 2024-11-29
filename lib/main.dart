@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _navigateToHome() async {
-    await Future.delayed(const Duration(seconds: 7));
+    await Future.delayed(const Duration(seconds: 5));
     await _checkIfLoggedIn();
     Navigator.pop(context);
     Navigator.push(context, MaterialPageRoute(builder: (context) => page));
@@ -90,7 +90,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         page = const LoginPage();
       }
-    }catch (e){
+    } catch (e) {
       if (kDebugMode) {
         print(e);
       }

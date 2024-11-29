@@ -195,8 +195,7 @@ class _FounderHomePageState extends State<FounderHomePage> {
                                                 onPressed: () =>
                                                     _addComment(index),
                                               ),
-                                              Text(
-                                                  '$comments comments'),
+                                              Text('$comments comments'),
                                               SizedBox(
                                                 width: MediaQuery.of(context)
                                                         .size

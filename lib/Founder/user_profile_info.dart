@@ -116,6 +116,7 @@ class _FounderGetUserInfoState extends State<FounderGetUserInfo> {
                             imagePath,
                             fit: BoxFit.cover,
                             alignment: Alignment.center,
+                            height: MediaQuery.of(context).size.height * 0.17,
                           ),
                         ),
                         SizedBox(
