@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "780888034585",
+    "project_id": "business-sehyogi",
+    "storage_bucket": "business-sehyogi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:780888034585:android:a58ca206d4740a6bdf4988",
+        "android_client_info": {
+          "package_name": "com.example.business_sehyogi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiNUVDuC1BxksLqdvF3dvweVYTeZSnvNo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

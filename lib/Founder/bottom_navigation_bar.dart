@@ -1,16 +1,20 @@
-import 'package:business_sehyogi/Founder/add_post.dart';
 import 'package:business_sehyogi/Founder/explore_page.dart';
 import 'package:business_sehyogi/Founder/home_page.dart';
 import 'package:business_sehyogi/Founder/notification_page.dart';
 import 'package:business_sehyogi/Founder/profile_page.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+
 class FounderBottomNavigationBar extends StatefulWidget {
   const FounderBottomNavigationBar({super.key});
+
   @override
-  State<FounderBottomNavigationBar> createState() => _FounderBottomNavigationBarState();
+  State<FounderBottomNavigationBar> createState() =>
+      _FounderBottomNavigationBarState();
 }
-class _FounderBottomNavigationBarState extends State<FounderBottomNavigationBar> {
+
+class _FounderBottomNavigationBarState
+    extends State<FounderBottomNavigationBar> {
   int selectedIndex = 0;
   final List<Widget> _widgetOptions = <Widget>[
     const Scaffold(
@@ -27,13 +31,10 @@ class _FounderBottomNavigationBarState extends State<FounderBottomNavigationBar>
     ),
     const Scaffold(
       backgroundColor: Colors.white,
-      body: FounderAddPost(),
-    ),
-    const Scaffold(
-      backgroundColor: Colors.white,
       body: FounderProfilePage(),
     ),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,15 +56,15 @@ class _FounderBottomNavigationBarState extends State<FounderBottomNavigationBar>
           items: [
             _buildIcon(Icons.home, 0),
             _buildIcon(Icons.explore, 1),
-            _buildIcon(Icons.add, 2),
-            _buildIcon(Icons.notifications, 3),
-            _buildIcon(Icons.person, 4),
+            _buildIcon(Icons.notifications, 2),
+            _buildIcon(Icons.person, 3),
           ],
           index: selectedIndex, // Use 'index' instead of 'currentIndex'
         ),
       ),
     );
   }
+
   Widget _buildIcon(IconData icon, int index) {
     return GestureDetector(
       onTap: () {

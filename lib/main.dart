@@ -6,13 +6,19 @@ import 'package:business_sehyogi/Common/login.dart';
 import 'package:business_sehyogi/Founder/bottom_navigation_bar.dart';
 import 'package:business_sehyogi/Investor/home_page.dart';
 import 'package:business_sehyogi/SharePreferences/saveSharePreferences.dart';
+import 'package:business_sehyogi/firebase_options.dart';
 import 'package:business_sehyogi/ipAddress.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
