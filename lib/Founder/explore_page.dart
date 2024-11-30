@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:business_sehyogi/Founder/user_profile_info.dart';
 import 'package:business_sehyogi/SharePreferences/saveSharePreferences.dart';
 import 'package:business_sehyogi/ipAddress.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -57,11 +58,15 @@ class _FounderExplorePageState extends State<FounderExplorePage> {
         await fetchData();
       } else {
         // Handle error
-        print("Failed to add connection. Status Code: ${response.statusCode}");
+        if (kDebugMode) {
+          print("Failed to add connection. Status Code: ${response.statusCode}");
+        }
       }
     } catch (e) {
       // Handle exception
-      print("Error adding connection: $e");
+      if (kDebugMode) {
+        print("Error adding connection: $e");
+      }
     }
   }
 

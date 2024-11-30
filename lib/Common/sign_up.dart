@@ -262,7 +262,6 @@ class _SignupPageState extends State<SignupPage> {
                 child: ElevatedButton(
                   onPressed: () async {
                     {
-                      print("API call started");
                       var registrationURL = "http://$IP/registerUser";
                       await http.post(Uri.parse(registrationURL),
                           headers: {"Content-Type": "application/json"},
@@ -281,7 +280,6 @@ class _SignupPageState extends State<SignupPage> {
                             "noOfIndeas": 0,
                             "noOfConnections": 0
                           }));
-                      print("API call finished");
                       Navigator.pop(context);
                       Navigator.push(
                         context,
@@ -362,7 +360,6 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   Future<bool> checkEmail(String email) async {
-    print("email check called");
     var url = "http://$IP/checkEmail/$email";
     try {
       final response = await http.get(Uri.parse(url));
